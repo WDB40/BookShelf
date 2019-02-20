@@ -23,15 +23,15 @@
 		</tr>
 		<tr>
 			<th>Author First Name</th>
-			<td><input type="text" name="authorFirstName" value="${bookToUpdate.authorFirstName}"></td>
+			<td><input type="text" name="authorFirstName" value="${bookToUpdate.author.firstName}"></td>
 		</tr>
 		<tr>
 			<th>Author Last Name</th>
-			<td><input type="text" name="authorLastName" value="${bookToUpdate.authorLastName}"></td>
+			<td><input type="text" name="authorLastName" value="${bookToUpdate.author.lastName}"></td>
 		</tr>
 		<tr>
 			<th>Genre</th>
-			<td><input type="text" name="genre" value="${bookToUpdate.genre}"></td>
+			<td><input type="text" name="genre" value="${bookToUpdate.genre.name}"></td>
 		</tr>
 	</table>
 	

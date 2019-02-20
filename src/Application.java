@@ -1,13 +1,19 @@
 import java.util.List;
 import java.util.Scanner;
 
+import controller.AuthorHelper;
 import controller.BookShelf;
+import controller.GenreHelper;
+import model.Author;
 import model.Book;
+import model.Genre;
 
 public class Application {
 	
 	static Scanner in = new Scanner(System.in);
 	static BookShelf bookShelf = new BookShelf();
+	static AuthorHelper authorHelper = new AuthorHelper();
+	static GenreHelper genreHelper = new GenreHelper();
 	
 	public static void main(String[] args) {
 		runMenu();
@@ -61,9 +67,12 @@ public class Application {
 		String authorLastName = in.nextLine();
 		
 		System.out.println("Enter the genre: ");
-		String genre = in.nextLine();
+		String genreName = in.nextLine();
 		
-		Book returnedBook = new Book(title, genre, authorFirstName, authorLastName);
+		Author author = new Author(authorFirstName, authorLastName);
+		Genre genre = new Genre(genreName);
+				
+		Book returnedBook = new Book(title, author, genre);
 		bookShelf.addBook(returnedBook);
 	}
 	
@@ -92,11 +101,15 @@ public class Application {
 			System.out.println("Enter the author's last name: ");
 			String authorLastName = in.nextLine();
 			
-			foundBooks = bookShelf.searchForBookByAuthorName(authorFirstName, authorLastName);
+			Author author = new Author(authorFirstName, authorLastName);
+			
+			foundBooks = bookShelf.searchForBookByAuthor(author);
 			
 		} else {
 			System.out.println("Enter the genre: ");
-			String genre = in.nextLine();
+			String genreName = in.nextLine();
+			
+			Genre genre = new Genre(genreName);
 			
 			foundBooks = bookShelf.searchForBookByGenre(genre);
 			
@@ -116,9 +129,8 @@ public class Application {
 			
 			System.out.println("Alrighty, I've got " + book);
 			System.out.println("1: Title.");
-			System.out.println("2: Author first name.");
-			System.out.println("3: Author last name.");
-			System.out.println("4: Genre.");
+			System.out.println("2: Author.");
+			System.out.println("3: Genre.");
 			
 			System.out.println("Which do you want to correct?");
 			int correction = in.nextInt();
@@ -134,17 +146,18 @@ public class Application {
 				System.out.println("Enter the new first name for the author: ");
 				String authorFirstName = in.nextLine();
 				
-				book.setAuthorFirstName(authorFirstName);
-				
-			} else if(correction == 3) {
-				System.out.println("Enter the new last name for the author: ");
+				System.out.println("Enter the new first name for the author: ");
 				String authorLastName = in.nextLine();
 				
-				book.setAuthorLastName(authorLastName);
+				Author author = new Author(authorFirstName, authorLastName);
 				
-			} else if(correction == 4) {
+				book.setAuthor(author);
+				
+			} else if(correction == 3) {
 				System.out.println("Enter the new genre: ");
-				String genre = in.nextLine();
+				String genreName = in.nextLine();
+				
+				Genre genre = new Genre(genreName);
 				
 				book.setGenre(genre);
 			}
@@ -167,10 +180,13 @@ public class Application {
 		String authorLastName = in.nextLine();
 		
 		System.out.println("Enter the genre: ");
-		String genre = in.nextLine();
+		String genreName = in.nextLine();
 		
+		Author author = new Author(authorFirstName, authorLastName);
+		Genre genre = new Genre(genreName);
 		
-		Book book = new Book(title, genre, authorFirstName, authorLastName);
+		Book book = new Book(title, author, genre);
+		
 		bookShelf.removeBook(book);
 	}
 	

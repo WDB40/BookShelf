@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Author;
 import model.Book;
+import model.Genre;
 
 /**
  * Servlet implementation class checkInBookServlet
@@ -31,11 +33,15 @@ public class checkInBookServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String title = request.getParameter("title");
+		
 		String authorFirstName = request.getParameter("authorFirstName");
 		String authorLastName = request.getParameter("authorLastName");
-		String genre = request.getParameter("genre");
+		Author author = new Author(authorFirstName, authorLastName);
 		
-		Book bookToCheckIn = new Book(title, genre, authorFirstName, authorLastName);
+		String genreName = request.getParameter("genre");
+		Genre genre = new Genre(genreName);
+		
+		Book bookToCheckIn = new Book(title, author, genre);
 		
 		BookShelf bookShelf = new BookShelf();
 		

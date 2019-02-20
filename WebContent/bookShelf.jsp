@@ -28,9 +28,9 @@
 				</td>
 				
 				<td>${currentBook.title}</td>
-				<td>${currentBook.authorFirstName}</td>
-				<td>${currentBook.authorLastName}</td>
-				<td>${currentBook.genre}</td>
+				<td>${currentBook.author.firstName}</td>
+				<td>${currentBook.author.lastName}</td>
+				<td>${currentBook.genre.name}</td>
 			</tr>
 		</c:forEach>
 	</table>

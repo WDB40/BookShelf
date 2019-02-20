@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Author;
 import model.Book;
+import model.Genre;
 
 /**
  * Servlet implementation class updateBookServlet
@@ -43,14 +45,17 @@ public class updateBookServlet extends HttpServlet {
 		Integer tempId = Integer.parseInt(request.getParameter("id"));
 		
 		String title = request.getParameter("title");
+		
 		String authorFirstName = request.getParameter("authorFirstName");
 		String authorLastName = request.getParameter("authorLastName");
-		String genre = request.getParameter("genre");
+		Author author = new Author(authorFirstName, authorLastName);
+		
+		String genreName = request.getParameter("genre");
+		Genre genre = new Genre(genreName);
 		
 		Book bookToUpdate = bookShelf.searchForBookById(tempId);
 		bookToUpdate.setTitle(title);
-		bookToUpdate.setAuthorFirstName(authorFirstName);
-		bookToUpdate.setAuthorLastName(authorLastName);
+		bookToUpdate.setAuthor(author);
 		bookToUpdate.setGenre(genre);
 		
 		bookShelf.updateBook(bookToUpdate);

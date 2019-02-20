@@ -7,19 +7,27 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import model.Author;
 import model.Book;
+import model.Genre;
 
 public class BookShelf {
 	
 	private static EntityManagerFactory entityManagerFactory 
 		= Persistence.createEntityManagerFactory("BookShelf");
 	
+	private AuthorHelper authorHelper = new AuthorHelper();
+	private GenreHelper genreHelper = new GenreHelper();
+	
 	public void addBook(Book book) {
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
+		book = this.setAuthor(book);
+		book = this.setGenre(book);
+		
 		entityManager.getTransaction().begin();
-		entityManager.persist(book);
+		entityManager.merge(book);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
@@ -43,17 +51,11 @@ public class BookShelf {
 		
 		TypedQuery<Book> typedQuery = entityManager.createQuery(""
 				+ "SELECT book "
-				+ "FROM Book book "
-				+ "WHERE book.authorLastName = :selectedAuthorLastName "
-				+ "and book.authorFirstName = :selectedAuthorFirstName "
-				+ "and book.title = :selectedTitle "
-				+ "and book.genre = :selectedGenre",
+					+ "FROM Book book "
+					+ "WHERE book.id = :selectedBookId",
 				Book.class);
-		
-		typedQuery.setParameter("selectedAuthorLastName", book.getAuthorLastName());
-		typedQuery.setParameter("selectedAuthorFirstName", book.getAuthorFirstName());
-		typedQuery.setParameter("selectedTitle", book.getTitle());
-		typedQuery.setParameter("selectedGenre", book.getGenre());
+				
+		typedQuery.setParameter("selectedBookId", book.getId());
 		
 		Book result = typedQuery.getSingleResult();
 		
@@ -81,6 +83,9 @@ public class BookShelf {
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
+		book = this.setAuthor(book);
+		book = this.setGenre(book);
+		
 		entityManager.getTransaction().begin();
 		
 		entityManager.merge(book);
@@ -89,7 +94,7 @@ public class BookShelf {
 		entityManager.close();
 	}
 	
-	public List<Book> searchForBookByGenre(String genre){
+	public List<Book> searchForBookByGenre(Genre genre){
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
@@ -98,9 +103,9 @@ public class BookShelf {
 		TypedQuery<Book> typedQuery = entityManager.createQuery(""
 				+ "SELECT book "
 				+ "FROM Book book "
-				+ "WHERE book.genre = :selectedGenre",
+				+ "WHERE book.genre = :selectedGenreId",
 				Book.class);
-		typedQuery.setParameter("selectedGenre", genre);
+		typedQuery.setParameter("selectedGenreId", genre.getId());
 		
 		List<Book> foundBooks = typedQuery.getResultList();
 		
@@ -109,7 +114,7 @@ public class BookShelf {
 		return foundBooks;
 	}
 	
-	public List<Book> searchForBookByAuthorName(String firstName, String lastName){
+	public List<Book> searchForBookByAuthor(Author author){
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
@@ -117,12 +122,10 @@ public class BookShelf {
 		
 		TypedQuery<Book> typedQuery = entityManager.createQuery(""
 				+ "SELECT book "
-				+ "FROM Book book "
-				+ "WHERE book.authorFirstName = :selectedAuthorFirstName "
-				+ "and book.authorLastName = :selectedAuthorLastName",
+					+ "FROM Book book "
+					+ "WHERE book.author.id = :selectedAuthorId ",
 				Book.class);
-		typedQuery.setParameter("selectedAuthorFirstName", firstName);
-		typedQuery.setParameter("selectedAuthorLastName", lastName);
+		typedQuery.setParameter("selectedAuthorId", author.getId());
 		
 		List<Book> foundBooks = typedQuery.getResultList();
 		
@@ -149,6 +152,28 @@ public class BookShelf {
 		entityManager.close();
 		
 		return foundBooks;
+	}
+	
+	private Book setAuthor(Book book) {
+		
+		Author author = book.getAuthor();
+		Author authorInDB = authorHelper.searchForAuthorByName(author.getFirstName(), author.getLastName());
+		
+		if(authorInDB != null) {
+			book.setAuthor(authorInDB);
+		}
+		
+		return book;
+	}
+	
+	private Book setGenre(Book book) {
+		Genre genre = book.getGenre();
+		Genre genreInDB = genreHelper.searchForGenreByName(genre.getName());
+		
+		if(genreInDB != null) {
+			book.setGenre(genreInDB);
+		}
+		return book;
 	}
 	
 	public void cleanUp() {
