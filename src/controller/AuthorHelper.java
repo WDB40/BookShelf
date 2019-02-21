@@ -15,12 +15,15 @@ public class AuthorHelper {
 				Persistence.createEntityManagerFactory("BookShelf");
 	
 	public void addAuthor(Author author) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
-		entityManager.persist(author);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+		if(!this.authorExists(author)) {
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			
+			entityManager.getTransaction().begin();
+			entityManager.persist(author);
+			entityManager.getTransaction().commit();
+			entityManager.close();
+		}
 	}
 	
 	public List<Author> showAllAuthors(){
@@ -35,27 +38,31 @@ public class AuthorHelper {
 	}
 	
 	public void removeAuthor(Author author) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
+		if(!this.activeAuthor(author)) {
 		
-		TypedQuery<Author> typedQuery = entityManager.createQuery(
-															"SELECT author "
-															+ "FROM Author author "
-															+ "WHERE author.id = :selectedAuthorId "
-																+ "and author.firstName = :selectedAuthorFirstName "
-																+ "and author.lastName = :selectedAuthorLastName",
-														Author.class);
-		typedQuery.setParameter("selectedAuthorId", author.getId());
-		typedQuery.setParameter("selectedAuthorFirstName", author.getFirstName());
-		typedQuery.setParameter("selectedAuthorLastName", author.getLastName());
-		
-		Author result = typedQuery.getSingleResult();
-		
-		entityManager.remove(result);
-		
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			
+			entityManager.getTransaction().begin();
+			
+			TypedQuery<Author> typedQuery = entityManager.createQuery(
+																"SELECT author "
+																+ "FROM Author author "
+																+ "WHERE author.id = :selectedAuthorId "
+																	+ "and author.firstName = :selectedAuthorFirstName "
+																	+ "and author.lastName = :selectedAuthorLastName",
+															Author.class);
+			typedQuery.setParameter("selectedAuthorId", author.getId());
+			typedQuery.setParameter("selectedAuthorFirstName", author.getFirstName());
+			typedQuery.setParameter("selectedAuthorLastName", author.getLastName());
+			
+			Author result = typedQuery.getSingleResult();
+			
+			entityManager.remove(result);
+			
+			entityManager.getTransaction().commit();
+			entityManager.close();
+		}
 	}
 	
 	public Author searchForAuthorById(int authorId) {
@@ -109,6 +116,28 @@ public class AuthorHelper {
 	
 	public void cleanUp() {
 		entityManagerFactory.close();
+	}
+	
+	private boolean authorExists(Author author) {
+		boolean exists = false;
+		
+		if(this.searchForAuthorByName(author.getFirstName(), author.getLastName()) != null) {
+			exists = true;
+		}
+		
+		return exists;
+	}
+	
+	private boolean activeAuthor(Author author) {
+		boolean active = false;
+		
+		BookShelf bookShelf = new BookShelf();
+		
+		if(!bookShelf.searchForBookByAuthor(author).isEmpty()) {
+			active = true;
+		}
+		
+		return active;
 	}
 
 }

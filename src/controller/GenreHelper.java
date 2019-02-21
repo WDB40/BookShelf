@@ -16,12 +16,16 @@ public class GenreHelper {
 	
 	
 	public void addGenre(Genre genre) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
-		entityManager.persist(genre);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+		if(!this.genreExists(genre)) {
+		
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			
+			entityManager.getTransaction().begin();
+			entityManager.persist(genre);
+			entityManager.getTransaction().commit();
+			entityManager.close();
+		}
 	}
 	
 	public List<Genre> showAllGenres(){
@@ -36,26 +40,30 @@ public class GenreHelper {
 	}
 	
 	public void removeGenre(Genre genre) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
+		if(!this.activeGenre(genre)) {
 		
-		TypedQuery<Genre> typedQuery = entityManager.createQuery(
-														"SELECT genre "
-														+ "FROM Genre genre "
-														+ "WHERE genre.id = :selectedGenreId "
-														+ 	"and genre.name = :selectedGenreName",
-													Genre.class);
-		
-		typedQuery.setParameter("selectedGenreId", genre.getId());
-		typedQuery.setParameter("selectedGenreName", genre.getName());
-		
-		Genre result = typedQuery.getSingleResult();
-		
-		entityManager.remove(result);
-		
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			
+			entityManager.getTransaction().begin();
+			
+			TypedQuery<Genre> typedQuery = entityManager.createQuery(
+															"SELECT genre "
+															+ "FROM Genre genre "
+															+ "WHERE genre.id = :selectedGenreId "
+															+ 	"and genre.name = :selectedGenreName",
+														Genre.class);
+			
+			typedQuery.setParameter("selectedGenreId", genre.getId());
+			typedQuery.setParameter("selectedGenreName", genre.getName());
+			
+			Genre result = typedQuery.getSingleResult();
+			
+			entityManager.remove(result);
+			
+			entityManager.getTransaction().commit();
+			entityManager.close();
+		}
 	}
 	
 	public Genre searchForGenreById(int genreId) {
@@ -104,6 +112,28 @@ public class GenreHelper {
 		
 		entityManager.getTransaction().commit();
 		entityManager.close();
+	}
+	
+	private boolean genreExists(Genre genre) {
+		boolean exists = false;
+		
+		if(this.searchForGenreByName(genre.getName()) != null){
+			exists = true;
+		}
+		
+		return exists;
+	}
+	
+	private boolean activeGenre(Genre genre) {
+		boolean active = false;
+		
+		BookShelf bookShelf = new BookShelf();
+		
+		if(!bookShelf.searchForBookByGenre(genre).isEmpty()) {
+			active = true;
+		}
+		
+		return active;
 	}
 	
 	public void cleanUp() {

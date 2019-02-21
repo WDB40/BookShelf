@@ -31,15 +31,16 @@ public class checkInBookServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		AuthorHelper authorHelper = new AuthorHelper();
+		GenreHelper genreHelper = new GenreHelper();
+		
 		String title = request.getParameter("title");
 		
-		String authorFirstName = request.getParameter("authorFirstName");
-		String authorLastName = request.getParameter("authorLastName");
-		Author author = new Author(authorFirstName, authorLastName);
+		int authorID = Integer.parseInt(request.getParameter("author"));
+		Author author = authorHelper.searchForAuthorById(authorID);
 		
-		String genreName = request.getParameter("genre");
-		Genre genre = new Genre(genreName);
+		int genreID = Integer.parseInt(request.getParameter("genre"));
+		Genre genre = genreHelper.searchForGenreById(genreID);
 		
 		Book bookToCheckIn = new Book(title, author, genre);
 		

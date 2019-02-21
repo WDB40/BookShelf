@@ -6,35 +6,13 @@
 </head>
 <body>
 
-<h1>Check In Book</h1>
+<h1>Main Menu</h1>
 
-<form action="checkInBookServlet" method="post">
-	<table>
-		<tr>
-			<th>Title:</th>
-			<td><input type="text" name="title"></td>
-		</tr>
-		<tr>
-			<th>Author First Name:</th>
-			<td><input type="text" name="authorFirstName"></td>
-		</tr>
-		<tr>
-			<th>Author Last Name:</th>
-			<td><input type="text" name="authorLastName"></td>
-		</tr>
-		<tr>
-			<th>Genre:</th>
-			<td><input type="text" name="genre"></td>
-		</tr>
-		
-		<tr>
-			<td></td>
-			<td><input type="submit" value="Check In"></td>
-		</tr>
-	</table>
-</form>
-
-<a href="viewAllBooksServlet">View All Available Books</a>
+<h3>Select an Option:</h3>
+<a href="checkInFormServlet">Check In a Book</a><br>
+<a href="viewAllBooksServlet">View All Available Books</a><br>
+<a href="viewAllAuthorsServlet">View All Authors</a><br>
+<a href="viewAllGenresServlet">View All Genres</a>
 
 </body>
 </html>

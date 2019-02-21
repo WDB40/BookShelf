@@ -39,5 +39,7 @@
 	<input type="submit" value="Check Out" name="action">
 	<input type="submit" value="Check In" name="action">
 </form>
+
+<a href="index.html">Home</a>
 </body>
 </html>

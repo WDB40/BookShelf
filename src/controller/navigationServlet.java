@@ -70,7 +70,7 @@ public class navigationServlet extends HttpServlet {
 			}
 		
 		} else if(action.equals("Check In")) {
-			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			getServletContext().getRequestDispatcher("/checkInFormServlet").forward(request, response);
 		}
 	}
 

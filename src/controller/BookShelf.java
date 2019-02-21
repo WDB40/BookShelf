@@ -103,7 +103,7 @@ public class BookShelf {
 		TypedQuery<Book> typedQuery = entityManager.createQuery(""
 				+ "SELECT book "
 				+ "FROM Book book "
-				+ "WHERE book.genre = :selectedGenreId",
+				+ "WHERE book.genre.id = :selectedGenreId",
 				Book.class);
 		typedQuery.setParameter("selectedGenreId", genre.getId());
 		
