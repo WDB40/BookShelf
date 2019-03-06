@@ -7,15 +7,17 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Check In Book</title>
+<script src="bookValidation.js"></script>
 </head>
 <body>
 <h1>Check In Book</h1>
 
-<form action="checkInBookServlet" method="post">
+<form action="checkInBookServlet" method="post" onsubmit="return validateBook();">
 	<table> 
 		<tr>
 			<th>Title:</th>
-			<td><input type="text" name="title"></td>
+			<td><input type="text" name="title" id="title"></td>
+			<td id="titleError"></td>
 		</tr>
 		
 		<tr>

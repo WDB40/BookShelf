@@ -5,21 +5,24 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Add Genre</title>
+<script src="genreValidation.js"></script>
 </head>
 <body>
 
 <h1>Add Genre</h1>
 
-<form method="post" action="addGenreServlet">
+<form method="post" action="addGenreServlet" onsubmit="return validateGenre();">
 	<table>
 		<tr>
 			<th>Genre:</th>
-			<td><input type="text" name="name"></td>
+			<td><input type="text" name="name" id="name"></td>
+			<td id="nameError"></td>
 		</tr>
 		
 		<tr>
 			<th>Description:</th>
-			<td><input type="text" name="desc"></td>
+			<td><input type="text" name="desc" id="desc"></td>
+			<td id="descError"></td>
 		</tr>
 	</table>
 	

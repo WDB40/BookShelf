@@ -7,23 +7,27 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Update Author</title>
+<script src="authorValidation.js"></script>
 </head>
 <body>
 
 <h1>Update Author</h1>
 
-<form method="post" action="updateAuthorServlet">
+<form method="post" action="updateAuthorServlet" onsubmit="return validateAuthor()">
 	
 	<input type="hidden" name="id" value="${author.id}">
 	
 	<table>
 		<tr>
 			<td>First Name:</td>
-			<td><input type="text" name="firstName" value="${author.firstName}"></td>
+			<td><input type="text" name="firstName" value="${author.firstName}" id="firstName"></td>
+			<td id="firstNameError"></td>
 		</tr>
+		
 		<tr>
 			<td>Last Name:</td>
-			<td><input type="text" name="lastName" value="${author.lastName}"></td>
+			<td><input type="text" name="lastName" value="${author.lastName}" id="lastName"></td>
+			<td id="lastNameError"></td>
 		</tr>
 	</table>
 	

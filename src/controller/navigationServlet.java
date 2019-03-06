@@ -40,6 +40,8 @@ public class navigationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String action = request.getParameter("action");
 		BookShelf bookShelf = new BookShelf();
+		AuthorHelper authorHelper = new AuthorHelper();
+		GenreHelper genreHelper = new GenreHelper();
 		
 		if(action == null) {
 			getServletContext().getRequestDispatcher("/viewAllBooksServlet").forward(request, response);
@@ -62,6 +64,10 @@ public class navigationServlet extends HttpServlet {
 				Integer tempId = Integer.parseInt(request.getParameter("id"));
 				Book bookToUpdate = bookShelf.searchForBookById(tempId);
 				request.setAttribute("bookToUpdate", bookToUpdate);
+				
+				request.setAttribute("allGenres", genreHelper.showAllGenres());
+				request.setAttribute("allAuthors", authorHelper.showAllAuthors());
+				
 				getServletContext().getRequestDispatcher("/updateBook.jsp").forward(request, response);
 			
 			} catch(NumberFormatException exception) {

@@ -8,30 +8,42 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Update Book</title>
+<script src="bookValidation.js"></script>
 </head>
 <body>
 <h1>Update Book</h1>
 
-<form action="updateBookServlet" method="post">
+<form action="updateBookServlet" method="post" onsubmit="return validateBook()">
 	
 	<input type="hidden" name="id" value="${bookToUpdate.id}">
 	
 	<table>
 		<tr>
 			<th>Title</th>
-			<td><input type="text" name="title" value="${bookToUpdate.title}"></td>
+			<td><input type="text" name="title" value="${bookToUpdate.title}" id="title"></td>
+			<td id="titleError"></td>
 		</tr>
+		
 		<tr>
-			<th>Author First Name</th>
-			<td><input type="text" name="authorFirstName" value="${bookToUpdate.author.firstName}"></td>
+			<th>Author</th>
+			<td>
+				<select name="author">
+					<c:forEach items="${requestScope.allAuthors}" var="currentAuthor">
+						<option value="${currentAuthor.id}">${currentAuthor.firstName} ${currentAuthor.lastName}</option>
+					</c:forEach>
+				</select>
+			</td>
 		</tr>
+
 		<tr>
-			<th>Author Last Name</th>
-			<td><input type="text" name="authorLastName" value="${bookToUpdate.author.lastName}"></td>
-		</tr>
-		<tr>
-			<th>Genre</th>
-			<td><input type="text" name="genre" value="${bookToUpdate.genre.name}"></td>
+			<th>Genre:</th>
+			<td>
+				<select name="genre">
+					<c:forEach items="${requestScope.allGenres}" var="currentGenre">
+						<option value="${currentGenre.id}">${currentGenre.name}</option>
+					</c:forEach>
+				</select>
+			</td>
 		</tr>
 	</table>
 	

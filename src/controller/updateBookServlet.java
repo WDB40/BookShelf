@@ -41,19 +41,19 @@ public class updateBookServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		BookShelf bookShelf = new BookShelf();
+		AuthorHelper authorHelper = new AuthorHelper();
+		GenreHelper genreHelper = new GenreHelper();
 		
-		Integer tempId = Integer.parseInt(request.getParameter("id"));
+		Integer bookId = Integer.parseInt(request.getParameter("id"));
+		Integer authorId = Integer.parseInt(request.getParameter("author"));
+		Integer genreId = Integer.parseInt(request.getParameter("genre"));
 		
 		String title = request.getParameter("title");
 		
-		String authorFirstName = request.getParameter("authorFirstName");
-		String authorLastName = request.getParameter("authorLastName");
-		Author author = new Author(authorFirstName, authorLastName);
+		Author author = authorHelper.searchForAuthorById(authorId);
+		Genre genre = genreHelper.searchForGenreById(genreId);
 		
-		String genreName = request.getParameter("genre");
-		Genre genre = new Genre(genreName);
-		
-		Book bookToUpdate = bookShelf.searchForBookById(tempId);
+		Book bookToUpdate = bookShelf.searchForBookById(bookId);
 		bookToUpdate.setTitle(title);
 		bookToUpdate.setAuthor(author);
 		bookToUpdate.setGenre(genre);
