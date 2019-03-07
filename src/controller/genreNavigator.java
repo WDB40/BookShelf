@@ -46,12 +46,18 @@ public class genreNavigator extends HttpServlet {
 		} else if(action.equals("Remove")) {
 			getServletContext().getRequestDispatcher("/removeGenreServlet").forward(request,response);
 		} else if(action.equals("Update")) {
-			int genreID = Integer.parseInt(request.getParameter("id"));
-			Genre genre = genreHelper.searchForGenreById(genreID);
 			
-			request.setAttribute("genre", genre);
+			try {
+				int genreID = Integer.parseInt(request.getParameter("id"));
+				Genre genre = genreHelper.searchForGenreById(genreID);
+				
+				request.setAttribute("genre", genre);
 			
-			getServletContext().getRequestDispatcher("/updateGenre.jsp").forward(request, response);
+				getServletContext().getRequestDispatcher("/updateGenre.jsp").forward(request, response);
+			} catch (NumberFormatException exception) {
+				System.out.println("Forgot to select a genre.");
+				getServletContext().getRequestDispatcher("/viewAllGenresServlet").forward(request, response);
+			}
 		}
 		
 	}

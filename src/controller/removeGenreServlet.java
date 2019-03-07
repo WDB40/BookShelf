@@ -36,9 +36,12 @@ public class removeGenreServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		GenreHelper genreHelper = new GenreHelper();
 		
-		int genreID = Integer.parseInt(request.getParameter("id"));
-		
-		genreHelper.removeGenre(genreHelper.searchForGenreById(genreID));
+		try {
+			int genreID = Integer.parseInt(request.getParameter("id"));
+			genreHelper.removeGenre(genreHelper.searchForGenreById(genreID));
+		} catch (NumberFormatException exception) {
+			System.out.println("Forgot to select a genre.");
+		}
 		
 		getServletContext().getRequestDispatcher("/viewAllGenresServlet").forward(request,response);
 	}

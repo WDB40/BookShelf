@@ -45,12 +45,19 @@ public class authorNavigator extends HttpServlet {
 		}else if(action.equals("Remove")) {	
 			getServletContext().getRequestDispatcher("/removeAuthorServlet").forward(request, response);
 		}else if(action.equals("Update")) {
-			int authorID = Integer.parseInt(request.getParameter("id"));
-			Author author = authorHelper.searchForAuthorById(authorID);
 			
-			request.setAttribute("author", author);
-			
-			getServletContext().getRequestDispatcher("/updateAuthor.jsp").forward(request, response);
+			try {
+				int authorID = Integer.parseInt(request.getParameter("id"));
+				Author author = authorHelper.searchForAuthorById(authorID);
+				
+				request.setAttribute("author", author);
+				
+				getServletContext().getRequestDispatcher("/updateAuthor.jsp").forward(request, response);
+			}
+			catch(NumberFormatException exception) {
+				System.out.println("Forgot to select an author.");
+				getServletContext().getRequestDispatcher("/viewAllAuthorsServlet").forward(request, response);
+			}
 		}
 	}
 

@@ -37,11 +37,16 @@ public class removeAuthorServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		AuthorHelper authorHelper = new AuthorHelper();
 		
-		int authorID = Integer.parseInt(request.getParameter("id"));
 		
-		authorHelper.removeAuthor(authorHelper.searchForAuthorById(authorID));
+		try {
+			int authorID = Integer.parseInt(request.getParameter("id"));
+			authorHelper.removeAuthor(authorHelper.searchForAuthorById(authorID));
+		} catch (NumberFormatException exception) {
+			System.out.println("Forgot to select an author.");
+		}
 		
 		getServletContext().getRequestDispatcher("/viewAllAuthorsServlet").forward(request,response);
+		
 		
 	}
 
